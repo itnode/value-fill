@@ -1,0 +1,129 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+
+    Aquire a value from an input field, combine with value present
+
+Example:
+
+
+        <special-element id="source" …>
+        <input is="value-fill" type="text" value-fill="source.name"  name="xxxe"  value="" />
+
+
+@demo
+-->
+<dom-module id="value-fill">
+
+  <style>
+    :host {
+       }
+
+  </style>
+
+  <template>
+    <content></content>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'value-fill',
+   
+    extends: 'input',
+
+    properties: {
+
+      /**
+       * `value-name` is the unique name of the calc
+       */
+      valueSource: String,
+
+
+   },
+
+    // Element Lifecycle
+
+    ready: function() {
+      // `ready` is called after all elements have been configured, but
+      // propagates bottom-up. This element's children are ready, but parents
+      // are not.
+      //
+      // This is the point where you should make modifications to the DOM (when
+      // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+      // `attached` fires once the element and its parents have been inserted
+      // into a document.
+      //
+      // This is a good place to perform any work related to your element's
+      // visual state or active behavior (measuring sizes, beginning animations,
+      // loading resources, etc).
+            
+        var these = this;
+               
+        var vS = these.valueSource.split(".");
+        these.source_id  = vS[0];
+        these.source_key = vS[1];
+
+
+        these.source = document.getElementById(these.source_id);
+
+        if ( these.source ) {
+
+            these.source.addEventListener('select-single-set', these.updateValue.bind(these)); 
+
+        } else {
+
+            console.error("Could not find value source: " + these.source_id);
+        }
+
+
+
+   },
+
+    
+
+    detached: function() {
+      // The analog to `attached`, `detached` fires when the element has been
+      // removed from a document.
+      //
+      // Use this to clean up anything you did in `attached`.
+
+        var these = this;
+   
+       
+
+    },
+
+    // Element Behavior
+
+    updateValue: function(e) {
+
+        var these   = this;
+        var detail = e.detail;
+
+        if ( detail[these.source_key] !== undefined ) {
+
+            these.value = detail[these.source_key];
+        }
+
+   },
+
+  });
+
+
+</script>
